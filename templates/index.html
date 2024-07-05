@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/uikit.min.css') }}" />
+  <script src="{{ url_for('static', filename='js/uikit.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/uikit-icons.min.js') }}"></script>
+  <script>
+    function getAllVerticesDigraphSrc() {
+      return "{{ url_for('static', filename='all_vertices_digraph.png') }}?" + performance.now();
+    }
+    function getFilteredDigraphSrc() {
+      return "{{ url_for('static', filename='filtered_digraph.png') }}?" + performance.now();
+    }
+    function enableLoading() {
+      document.getElementById("loading_section").style.display = "flex";
+    }
+  </script>
+</head>
+<body>
+  <!-- HEADER AREA-->
+  <br>
+  <h1 style="display: flex; justify-content: center;">Frankline & Co. LP Forex Arbitrage using Bellman Ford Algorithm</h1>
+  <br>
+  <!-- USER INPUT AREA-->
+  <form action="/" method="post" style="display:flex; justify-content:center;">
+    <div class="uk-margin">
+      <div class="uk-inline">
+        <span class="uk-form-icon" uk-icon="icon: calendar"></span>
+        <input class="uk-input  uk-form-width-large" type="text" name="date" placeholder="YYYY-MM-DD (default is today)">
+      </div>
+      <div class="uk-inline">
+        <span class="uk-form-icon" uk-icon="icon: credit-card"></span>
+        <input class="uk-input uk-form-width-large" type="text" name="base_currency" placeholder="Base Currency (default is USD)">
+      </div>
+      <button name="start" type="submit" onclick="enableLoading()" class="uk-button uk-button-secondary">Calculate</button>
+    </div>
+  </form>
+  <!-- LOADING AREA-->
+  <div id="loading_section" style="display:none; justify-content:center;">
+    <div class="uk-alert-primary" uk-alert>
+      <a class="uk-alert-close" uk-close> </a>
+      <p>Calculating...this could take up to a few minutes!&nbsp&nbsp</p>
+    </div>
+    <div style="margin-left:20px; margin-top:10px" uk-spinner="ratio: 1"></div>
+  </div>
+  <br>
+  <!-- ARBITRAGE PATHS AREA-->
+  <div style="margin-left: 20%; margin-right: 20%">
+    <div class="uk-card-small uk-card-secondary uk-card-body">
+      <h3 class="uk-card-title">
+        Arbitrage Paths {{ date }}
+      </h3>
+    </div>
+    <div class="uk-card uk-card-default uk-card-body">
+      <div style="margin-top: 10px" class="uk-card-badge uk-label">{{ percentage_gains|safe }}</div>
+      <h5 class="uk-text">{{ paths|safe }}</h5>
+    </div>
+  </div>
+  <br>
+  <!-- GRAPH AREA-->
+  <div style="margin-left: 20%; margin-right: 20%">
+    <div class="uk-card-small uk-card-primary uk-card-body">
+      <h3 class="uk-card-title">Graphs {{ date }}</h3>
+    </div>
+    <div class="uk-card uk-card-default">
+      <img src="{{ url_for('static', filename='placeholder.jpg') }}"
+           onload="this.src=getFilteredDigraphSrc(); this.onload=null;" alt=""/>
+    </div>
+    <br>
+    <div class="uk-card uk-card-default">
+      <img src="{{ url_for('static', filename='placeholder.jpg') }}"
+           onload="this.src=getAllVerticesDigraphSrc(); this.onload=null;" alt=""/>
+    </div>
+  </div>
+  <br>
+  <!-- EXCHANGE TABLE AREA-->
+  <div style="margin-left: 20%; margin-right: 20%">
+    <div class="uk-card-small uk-card-secondary uk-card-body">
+      <h3 class="uk-card-title">Exchange Table {{ date }} </h3>
+    </div>
+    <div class="uk-card uk-card-default">
+      <div style="height: 500px; overflow: auto;">
+        {{ exchange_table|safe }}
+      </div>
+    </div>
+  </div>
+  <br>
+</body>
+</html>
